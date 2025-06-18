@@ -1,1 +1,1 @@
-# HIIT-Planner
+# HIIT Planner
