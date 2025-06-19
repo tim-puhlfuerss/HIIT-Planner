@@ -17,8 +17,15 @@ const EXERCISES = {
   Legs: ["Squats", "Wide Squats", "Lunges Left", "Lunges Right", "Calf Raises"],
 };
 
-//EXERCISES_DAY1 = [EXERCISES["Legs"], EXERCISES["Abs"]];
-//EXERCISES_DAY2 = [EXERCISES["Chest+Arms"], EXERCISES["Abs"]];
+const EXERCISES_DAY1 = {
+  Legs: EXERCISES["Legs"],
+  Abs: EXERCISES["Abs"],
+};
+
+const EXERCISES_DAY2 = {
+  "Chest+Arms": EXERCISES["Chest+Arms"],
+  Abs: EXERCISES["Abs"],
+};
 
 // Utility: Shuffle array (https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 function shuffle(arr) {
@@ -97,7 +104,7 @@ function createWorkout({ selectedExercises, rounds = 10, categoryChange = 1 }) {
 
 // Example usage:
 const workout = createWorkout({
-  selectedExercises: EXERCISES,
+  selectedExercises: EXERCISES_DAY2,
   rounds: 10,
   categoryChange: 1,
 });

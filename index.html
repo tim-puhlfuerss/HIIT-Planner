@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>HIIT Workout Planner</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <script src="hiit_planner.js" defer></script>
+</head>
+<body>
+    <main class="container">
+        <h1>HIIT Workout Planner</h1>
+        <form id="workoutForm">
+            <fieldset>
+                <label for="rounds">Number of Rounds:</label>
+                <input type="number" id="rounds" name="rounds" min="1" value="10" required>
+
+                <label for="categoryChange">Rounds per Category Change:</label>
+                <input type="number" id="categoryChange" name="categoryChange" min="1" value="1" required>
+
+                <label for="exercises">Select Exercises:</label>
+                <select id="exercises" name="exercises" multiple required>
+                    <option value="Chest+Arms">Chest + Arms</option>
+                    <option value="Abs">Abs</option>
+                    <option value="Legs">Legs</option>
+                </select>
+            </fieldset>
+            <button type="submit" class="outline contrast">Generate Workout</button>
+        </form>
+        <div id="workoutOutput"></div>
+    </main>
+
+    <script>
+        document.getElementById('workoutForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const rounds = parseInt(document.getElementById('rounds').value);
+            const categoryChange = parseInt(document.getElementById('categoryChange').value);
+            const selectedExercises = Array.from(document.getElementById('exercises').selectedOptions).reduce((acc, option) => {
+                acc[option.value] = EXERCISES[option.value];
+                return acc;
+            }, {});
+
+            const workout = createWorkout({ selectedExercises, rounds, categoryChange });
+            const outputDiv = document.getElementById('workoutOutput');
+            outputDiv.innerHTML = '<br><h2>Generated Workout</h2>' + 
+                '<table class="striped"><thead><tr><th scope="col">Exercise</th><th scope="col">Category</th></tr></thead><tbody>' +
+                workout.map(ex => `<tr><td>${ex.exercise}</td><td>${ex.category}</td></tr>`).join('') +
+                '</tbody></table>'
+        });
+    </script>
+</body>
+</html>
