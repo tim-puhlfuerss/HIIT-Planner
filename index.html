@@ -17,15 +17,15 @@
                 <label for="rounds">Number of Rounds:</label>
                 <input type="number" id="rounds" name="rounds" min="1" value="10" required>
 
-                <label for="categoryChange">Rounds per Category Change:</label>
-                <input type="number" id="categoryChange" name="categoryChange" min="1" value="1" required>
-
-                <label for="exercises">Select Exercises:</label>
+                <label for="exercises">Select Exercise Categories:</label>
                 <select id="exercises" name="exercises" multiple required>
                     <option value="Chest+Arms">Chest + Arms</option>
                     <option value="Abs">Abs</option>
                     <option value="Legs">Legs</option>
                 </select>
+
+                <label for="categoryChange">Rounds per Category Change:</label>
+                <input type="number" id="categoryChange" name="categoryChange" min="1" value="1" required>
             </fieldset>
             <button type="submit" class="outline contrast">Generate Workout</button>
         </form>
