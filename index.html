@@ -44,9 +44,10 @@
 
             const workout = createWorkout({ selectedExercises, rounds, categoryChange });
             const outputDiv = document.getElementById('workoutOutput');
-            outputDiv.innerHTML = '<br><h2>Generated Workout</h2>' + 
-                '<table class="striped"><thead><tr><th scope="col">Exercise</th><th scope="col">Category</th></tr></thead><tbody>' +
-                workout.map(ex => `<tr><td>${ex.exercise}</td><td>${ex.category}</td></tr>`).join('') +
+            outputDiv.innerHTML = 
+                '<br><h2>Generated Workout</h2>' + 
+                '<table class="striped">' + 
+                workout.map(ex => `<tr><td><h3>${ex.emoji}&emsp;${ex.exercise}</h3></td></tr>`).join('') +
                 '</tbody></table>'
         });
     </script>

@@ -27,6 +27,12 @@ const EXERCISES_DAY2 = {
   Abs: EXERCISES["Abs"],
 };
 
+const EXERCISES_EMOJIS = {
+  "Chest+Arms": "💪",
+  Abs: "🧘",
+  Legs: "🦵",
+};
+
 // Utility: Shuffle array (https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -87,7 +93,11 @@ function createWorkout({ selectedExercises, rounds = 10, categoryChange = 1 }) {
       // Randomly pop
       const idx = Math.floor(Math.random() * catArr.length);
       //toAdd.push(catArr.splice(idx, 1)[0]);
-      toAdd.push({ exercise: catArr.splice(idx, 1)[0], category: cat });
+      toAdd.push({
+        exercise: catArr.splice(idx, 1)[0],
+        category: cat,
+        emoji: EXERCISES_EMOJIS[cat],
+      });
     }
     // Add to workout series
     for (const ex of toAdd) {
