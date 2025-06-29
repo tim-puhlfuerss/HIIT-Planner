@@ -91,19 +91,19 @@
             document.getElementById("categoryChange").value
           );
 
-          const selectedExercises = {};
+          const selectedCategories = {};
           if (document.getElementById("chest-arms").checked) {
-            selectedExercises["Chest+Arms"] = EXERCISES["Chest+Arms"];
+            selectedCategories["Chest+Arms"] = EXERCISES["Chest+Arms"];
           }
           if (document.getElementById("abs").checked) {
-            selectedExercises["Abs"] = EXERCISES["Abs"];
+            selectedCategories["Abs"] = EXERCISES["Abs"];
           }
           if (document.getElementById("legs").checked) {
-            selectedExercises["Legs"] = EXERCISES["Legs"];
+            selectedCategories["Legs"] = EXERCISES["Legs"];
           }
 
           const workout = createWorkout({
-            selectedExercises,
+            selectedCategories,
             rounds,
             categoryChange,
           });

@@ -44,29 +44,21 @@ function shuffle(arr) {
 
 /**
  * Main workout generator function.
- * @param {Object} config
- * @param {Object} config.selectedExercises - { "chest+arms": [...], ... }
- * @param {number} config.rounds - Number of exercise rounds (default 10)
- * @param {number} config.categoryChange - Number of rounds before changing category (default 1)
+ * @param {Object} selectedCategories - { "chest+arms": [...], ... }
+ * @param {number} rounds - Number of exercise rounds (default 10)
+ * @param {number} categoryChange - Number of rounds before changing category (default 1)
  * @returns {Array} - Workout series (array of exercise names)
  */
-function createWorkout({ selectedExercises, rounds = 10, categoryChange = 1 }) {
+function createWorkout({
+  selectedCategories,
+  rounds = 10,
+  categoryChange = 1,
+}) {
   // Per category, create an array of exercises of size 'rounds' divided by number of categories
-  const categories = Object.keys(selectedExercises);
+  const categories = Object.keys(selectedCategories);
   const categoryArrays = {};
-  const categoryArraySize = Math.ceil(rounds / categories.length);
   for (const cat of categories) {
     categoryArrays[cat] = [];
-    while (categoryArrays[cat].length < categoryArraySize) {
-      // Get min X from empty fields and category size
-      const emptyFields = categoryArraySize - categoryArrays[cat].length;
-      const catSize = selectedExercises[cat].length;
-      const X = Math.min(emptyFields, catSize);
-
-      // Randomly draw X exercises from category
-      const shuffled = shuffle([...selectedExercises[cat]]);
-      categoryArrays[cat].push(...shuffled.slice(0, X));
-    }
   }
 
   // Randomly draw the order of categories for the workout
@@ -90,6 +82,13 @@ function createWorkout({ selectedExercises, rounds = 10, categoryChange = 1 }) {
     const catArr = categoryArrays[cat];
     const toAdd = [];
     for (let j = 0; j < Y; j++) {
+      // Check if category array is empty, if so, refill it
+      if (catArr.length === 0) {
+        // Refill the category array by shuffling and adding all exercises from this category
+        const shuffled = shuffle([...selectedCategories[cat]]);
+        catArr.push(...shuffled);
+      }
+
       // Randomly pop
       const idx = Math.floor(Math.random() * catArr.length);
       //toAdd.push(catArr.splice(idx, 1)[0]);
@@ -119,3 +118,30 @@ const workout = createWorkout({
   categoryChange: 1,
 });
 console.log("Workout Series:", workout);
+
+// Test case for the fix
+console.log("\n--- Testing the fix ---");
+const testWorkout = createWorkout({
+  selectedCategories: {
+    "Chest+Arms": EXERCISES["Chest+Arms"],
+    Abs: EXERCISES["Abs"],
+  },
+  rounds: 10,
+  categoryChange: 2,
+});
+console.log("Test Workout Series (2 categories, 10 rounds, categoryChange=2):");
+testWorkout.forEach((exercise, index) => {
+  console.log(
+    `${index + 1}: ${
+      exercise
+        ? exercise.exercise + " (" + exercise.category + ")"
+        : "UNDEFINED"
+    }`
+  );
+});
+
+// Check for undefined exercises
+const hasUndefined = testWorkout.some((ex) => !ex || !ex.exercise);
+console.log(
+  `Has undefined exercises: ${hasUndefined ? "YES - PROBLEM!" : "NO - FIXED!"}`
+);
