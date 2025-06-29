@@ -1,75 +1,137 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="Generate HIIT workouts with random exercises and customizable rounds."
+    />
     <title>HIIT Workout Planner</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
     <script src="hiit_planner.js" defer></script>
-</head>
-<body>
-    <main class="container">
+  </head>
+  <body>
+    <header class="container">
+      <hgroup>
         <h1>HIIT Workout Planner</h1>
+        <p>
+          Generate HIIT workouts with random exercises and customizable rounds.
+        </p>
+      </hgroup>
+    </header>
+    <main class="container">
+      <section>
+        <h2>Workout Configuration</h2>
         <form id="workoutForm">
+          <fieldset>
             <fieldset>
-                <label for="rounds">Number of Rounds:</label>
-                <input type="number" id="rounds" name="rounds" min="1" value="10" required>
-
-                <fieldset>
-                    <legend>Exercise categories:</legend>
-                    <label>
-                        <input type="checkbox" id="chest-arms" checked />
-                        Chest + Arms
-                    </label>
-                    <label>
-                        <input type="checkbox" id="abs" checked />
-                        Abs
-                    </label>
-                    <label>
-                        <input type="checkbox" id="legs" checked />
-                        Legs
-                    </label>
-                </fieldset>
-
-                <label for="categoryChange">Rounds per Category Change:</label>
-                <input type="number" id="categoryChange" name="categoryChange" min="1" value="1" required>
+              <legend><strong>Exercise categories:</strong></legend>
+              <label>
+                <input type="checkbox" id="chest-arms" checked />
+                Chest + Arms
+              </label>
+              <label>
+                <input type="checkbox" id="abs" checked />
+                Abs
+              </label>
+              <label>
+                <input type="checkbox" id="legs" checked />
+                Legs
+              </label>
             </fieldset>
-            <button type="submit" class="outline contrast">Generate Workout</button>
+
+            <label for="rounds"><strong>Number of rounds:</strong></label>
+            <input
+              type="number"
+              id="rounds"
+              name="rounds"
+              min="1"
+              value="10"
+              required
+            />
+
+            <label for="categoryChange"
+              ><strong>Rounds before category change:</strong></label
+            >
+            <input
+              type="number"
+              id="categoryChange"
+              name="categoryChange"
+              min="1"
+              value="1"
+              required
+            />
+          </fieldset>
+          <button type="submit" class="outline contrast">
+            Generate Workout
+          </button>
         </form>
+      </section>
+
+      <section>
         <div id="workoutOutput"></div>
+      </section>
     </main>
 
     <script>
-        document.getElementById('workoutForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+      document
+        .getElementById("workoutForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
 
-            const rounds = parseInt(document.getElementById('rounds').value);
-            const categoryChange = parseInt(document.getElementById('categoryChange').value);
-            
-            const selectedExercises = {};
-            if (document.getElementById('chest-arms').checked) {
-                selectedExercises["Chest+Arms"] = EXERCISES["Chest+Arms"];
-            }
-            if (document.getElementById('abs').checked) {
-                selectedExercises["Abs"] = EXERCISES["Abs"];
-            }
-            if (document.getElementById('legs').checked) {
-                selectedExercises["Legs"] = EXERCISES["Legs"];
-            }
+          const rounds = parseInt(document.getElementById("rounds").value);
+          const categoryChange = parseInt(
+            document.getElementById("categoryChange").value
+          );
 
-            const workout = createWorkout({ selectedExercises, rounds, categoryChange });
-            const outputDiv = document.getElementById('workoutOutput');
-            outputDiv.innerHTML = 
-                '<br><h2>Generated Workout</h2>' + 
-                '<table class="striped">' + 
-                workout.map(ex => `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`).join('') +
-                '</tbody></table>'
+          const selectedExercises = {};
+          if (document.getElementById("chest-arms").checked) {
+            selectedExercises["Chest+Arms"] = EXERCISES["Chest+Arms"];
+          }
+          if (document.getElementById("abs").checked) {
+            selectedExercises["Abs"] = EXERCISES["Abs"];
+          }
+          if (document.getElementById("legs").checked) {
+            selectedExercises["Legs"] = EXERCISES["Legs"];
+          }
+
+          const workout = createWorkout({
+            selectedExercises,
+            rounds,
+            categoryChange,
+          });
+          const outputDiv = document.getElementById("workoutOutput");
+          outputDiv.innerHTML =
+            "<br><h2>Generated Workout</h2>" +
+            '<table class="striped">' +
+            workout
+              .map(
+                (ex) =>
+                  `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
+              )
+              .join("") +
+            "</tbody></table>";
         });
     </script>
     <footer class="container">
-        <p><small>View project on <a href="https://github.com/tim-puhlfuerss/HIIT-Planner" target="_blank">GitHub</a>. Powered by <a href="https://picocss.com" target="_blank">Pico CSS</a>.</small></p>
+      <p>
+        <small
+          >View project on
+          <a
+            href="https://github.com/tim-puhlfuerss/HIIT-Planner"
+            target="_blank"
+            >GitHub</a
+          >. Built with
+          <a href="https://picocss.com" target="_blank">Pico</a>.</small
+        >
+      </p>
     </footer>
-</body>
+  </body>
 </html>
