@@ -17,12 +17,21 @@
                 <label for="rounds">Number of Rounds:</label>
                 <input type="number" id="rounds" name="rounds" min="1" value="10" required>
 
-                <label for="exercises">Exercise Categories:</label>
-                <select id="exercises" name="exercises" multiple required>
-                    <option value="Chest+Arms">Chest + Arms</option>
-                    <option value="Abs">Abs</option>
-                    <option value="Legs">Legs</option>
-                </select>
+                <fieldset>
+                    <legend>Exercise categories:</legend>
+                    <label>
+                        <input type="checkbox" id="chest-arms" checked />
+                        Chest + Arms
+                    </label>
+                    <label>
+                        <input type="checkbox" id="abs" checked />
+                        Abs
+                    </label>
+                    <label>
+                        <input type="checkbox" id="legs" checked />
+                        Legs
+                    </label>
+                </fieldset>
 
                 <label for="categoryChange">Rounds per Category Change:</label>
                 <input type="number" id="categoryChange" name="categoryChange" min="1" value="1" required>
@@ -35,12 +44,20 @@
     <script>
         document.getElementById('workoutForm').addEventListener('submit', function(event) {
             event.preventDefault();
+
             const rounds = parseInt(document.getElementById('rounds').value);
             const categoryChange = parseInt(document.getElementById('categoryChange').value);
-            const selectedExercises = Array.from(document.getElementById('exercises').selectedOptions).reduce((acc, option) => {
-                acc[option.value] = EXERCISES[option.value];
-                return acc;
-            }, {});
+            
+            const selectedExercises = {};
+            if (document.getElementById('chest-arms').checked) {
+                selectedExercises["Chest+Arms"] = EXERCISES["Chest+Arms"];
+            }
+            if (document.getElementById('abs').checked) {
+                selectedExercises["Abs"] = EXERCISES["Abs"];
+            }
+            if (document.getElementById('legs').checked) {
+                selectedExercises["Legs"] = EXERCISES["Legs"];
+            }
 
             const workout = createWorkout({ selectedExercises, rounds, categoryChange });
             const outputDiv = document.getElementById('workoutOutput');
