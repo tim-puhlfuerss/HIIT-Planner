@@ -17,16 +17,6 @@ const EXERCISES = {
   Legs: ["Squats", "Wide Squats", "Lunges Left", "Lunges Right", "Calf Raises"],
 };
 
-const EXERCISES_DAY1 = {
-  Legs: EXERCISES["Legs"],
-  Abs: EXERCISES["Abs"],
-};
-
-const EXERCISES_DAY2 = {
-  "Chest+Arms": EXERCISES["Chest+Arms"],
-  Abs: EXERCISES["Abs"],
-};
-
 const EXERCISES_EMOJIS = {
   "Chest+Arms": "💪",
   Abs: "🧘",
@@ -110,38 +100,3 @@ function createWorkout({
   // Return workout series
   return workoutSeries;
 }
-
-// Example usage:
-const workout = createWorkout({
-  selectedExercises: EXERCISES_DAY2,
-  rounds: 10,
-  categoryChange: 1,
-});
-console.log("Workout Series:", workout);
-
-// Test case for the fix
-console.log("\n--- Testing the fix ---");
-const testWorkout = createWorkout({
-  selectedCategories: {
-    "Chest+Arms": EXERCISES["Chest+Arms"],
-    Abs: EXERCISES["Abs"],
-  },
-  rounds: 10,
-  categoryChange: 2,
-});
-console.log("Test Workout Series (2 categories, 10 rounds, categoryChange=2):");
-testWorkout.forEach((exercise, index) => {
-  console.log(
-    `${index + 1}: ${
-      exercise
-        ? exercise.exercise + " (" + exercise.category + ")"
-        : "UNDEFINED"
-    }`
-  );
-});
-
-// Check for undefined exercises
-const hasUndefined = testWorkout.some((ex) => !ex || !ex.exercise);
-console.log(
-  `Has undefined exercises: ${hasUndefined ? "YES - PROBLEM!" : "NO - FIXED!"}`
-);
