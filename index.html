@@ -49,30 +49,57 @@
             </fieldset>
 
             <label for="rounds"><strong>Number of rounds:</strong></label>
-            <input
-              type="number"
-              id="rounds"
-              name="rounds"
-              min="1"
-              value="10"
-              required
-            />
+            <fieldset role="group">
+              <input
+                type="number"
+                id="rounds"
+                name="rounds"
+                min="1"
+                value="10"
+                required
+              />
+              <input
+                type="button"
+                id="roundsDecrease"
+                class="secondary"
+                value="-"
+              />
+              <input
+                type="button"
+                id="roundsIncrease"
+                class="secondary"
+                value="+"
+              />
+            </fieldset>
 
             <label for="categoryChange"
               ><strong>Rounds before category change:</strong></label
             >
-            <input
-              type="number"
-              id="categoryChange"
-              name="categoryChange"
-              min="1"
-              value="1"
-              required
-            />
+            <fieldset role="group">
+              <input
+                type="number"
+                id="categoryChange"
+                name="categoryChange"
+                min="1"
+                value="1"
+                required
+              />
+              <input
+                type="button"
+                id="categoryChangeDecrease"
+                class="secondary"
+                value="-"
+              />
+              <input
+                type="button"
+                id="categoryChangeIncrease"
+                class="secondary"
+                value="+"
+              />
+            </fieldset>
           </fieldset>
-          <button type="submit" class="outline contrast">
-            Generate Workout
-          </button>
+
+          <button type="submit">Generate Workout</button>
         </form>
       </section>
 
@@ -80,8 +107,61 @@
         <div id="workoutOutput"></div>
       </section>
     </main>
+    <footer class="container">
+      <p>
+        <small
+          >View project on
+          <a
+            href="https://github.com/tim-puhlfuerss/HIIT-Planner"
+            target="_blank"
+            >GitHub</a
+          >. Built with
+          <a href="https://picocss.com" target="_blank">Pico</a>.</small
+        >
+      </p>
+    </footer>
 
     <script>
+      // Increase and decrease category change input
+      document.addEventListener("DOMContentLoaded", function () {
+        const categoryChangeInput = document.getElementById("categoryChange");
+
+        document
+          .getElementById("categoryChangeIncrease")
+          .addEventListener("click", function () {
+            categoryChangeInput.value = parseInt(categoryChangeInput.value) + 1;
+          });
+
+        document
+          .getElementById("categoryChangeDecrease")
+          .addEventListener("click", function () {
+            if (parseInt(categoryChangeInput.value) > 1) {
+              categoryChangeInput.value =
+                parseInt(categoryChangeInput.value) - 1;
+            }
+          });
+      });
+
+      // Increase and decrease rounds input
+      document.addEventListener("DOMContentLoaded", function () {
+        const roundsInput = document.getElementById("rounds");
+
+        document
+          .getElementById("roundsIncrease")
+          .addEventListener("click", function () {
+            roundsInput.value = parseInt(roundsInput.value) + 1;
+          });
+
+        document
+          .getElementById("roundsDecrease")
+          .addEventListener("click", function () {
+            if (parseInt(roundsInput.value) > 1) {
+              roundsInput.value = parseInt(roundsInput.value) - 1;
+            }
+          });
+      });
+
+      // Generate workout based on input
       document
         .getElementById("workoutForm")
         .addEventListener("submit", function (event) {
@@ -121,18 +201,5 @@
             "</tbody></table>";
         });
     </script>
-    <footer class="container">
-      <p>
-        <small
-          >View project on
-          <a
-            href="https://github.com/tim-puhlfuerss/HIIT-Planner"
-            target="_blank"
-            >GitHub</a
-          >. Built with
-          <a href="https://picocss.com" target="_blank">Pico</a>.</small
-        >
-      </p>
-    </footer>
   </body>
 </html>
