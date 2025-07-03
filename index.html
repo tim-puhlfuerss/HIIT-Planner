@@ -29,84 +29,88 @@
     </header>
     <main class="container">
       <section>
-        <h2>Configuration</h2>
         <form id="workoutForm">
-          <fieldset>
-            <fieldset>
-              <legend><strong>Exercise categories:</strong></legend>
-              <label>
-                <input type="checkbox" id="chest-arms" checked />
-                💪 Chest + Arms
-              </label>
-              <label>
-                <input type="checkbox" id="abs" checked />
-                🧘 Abs
-              </label>
-              <label>
-                <input type="checkbox" id="legs" checked />
-                🦵 Legs
-              </label>
-            </fieldset>
+          <details name="configuration">
+            <summary role="button" class="outline">Configuration</summary>
 
-            <label for="rounds"><strong>Number of rounds:</strong></label>
-            <fieldset role="group">
-              <input
-                type="number"
-                id="rounds"
-                name="rounds"
-                min="1"
-                value="10"
-                required
-              />
-              <input
-                type="button"
-                id="roundsDecrease"
-                class="secondary"
-                value="-"
-              />
-              <input
-                type="button"
-                id="roundsIncrease"
-                class="secondary"
-                value="+"
-                aria-current="true"
-              />
-            </fieldset>
+            <fieldset class="container">
+              <fieldset>
+                <legend><strong>Exercise categories:</strong></legend>
+                <label>
+                  <input type="checkbox" id="chest-arms" checked />
+                  💪 Chest + Arms
+                </label>
+                <label>
+                  <input type="checkbox" id="abs" checked />
+                  🧘 Abs
+                </label>
+                <label>
+                  <input type="checkbox" id="legs" checked />
+                  🦵 Legs
+                </label>
+              </fieldset>
 
-            <label for="categoryChange"
-              ><strong>Rounds before category change:</strong></label
-            >
-            <fieldset role="group">
-              <input
-                type="number"
-                id="categoryChange"
-                name="categoryChange"
-                min="1"
-                value="1"
-                required
-              />
-              <input
-                type="button"
-                id="categoryChangeDecrease"
-                class="secondary"
-                value="-"
-              />
-              <input
-                type="button"
-                id="categoryChangeIncrease"
-                class="secondary"
-                value="+"
-                aria-current="true"
-              />
-            </fieldset>
-          </fieldset>
+              <label for="rounds"><strong>Number of rounds:</strong></label>
+              <fieldset role="group">
+                <input
+                  type="number"
+                  id="rounds"
+                  name="rounds"
+                  min="1"
+                  value="10"
+                  required
+                />
+                <input
+                  type="button"
+                  id="roundsDecrease"
+                  class="secondary"
+                  value="-"
+                />
+                <input
+                  type="button"
+                  id="roundsIncrease"
+                  class="secondary"
+                  value="+"
+                  aria-current="true"
+                />
+              </fieldset>
 
-          <button type="submit">Generate Workout</button>
+              <label for="categoryChange"
+                ><strong>Rounds before category change:</strong></label
+              >
+              <fieldset role="group">
+                <input
+                  type="number"
+                  id="categoryChange"
+                  name="categoryChange"
+                  min="1"
+                  value="1"
+                  required
+                />
+                <input
+                  type="button"
+                  id="categoryChangeDecrease"
+                  class="secondary"
+                  value="-"
+                />
+                <input
+                  type="button"
+                  id="categoryChangeIncrease"
+                  class="secondary"
+                  value="+"
+                  aria-current="true"
+                />
+              </fieldset>
+            </fieldset>
+          </details>
+
+          <details name="workout" open>
+            <summary role="button" id="submit">Generate Workout</summary>
+            <section>
+              <div id="workoutOutput"></div>
+            </section>
+          </details>
         </form>
-      </section>
-
-      <section>
-        <div id="workoutOutput"></div>
       </section>
     </main>
     <footer class="container">
@@ -164,44 +168,41 @@
       });
 
       // Generate workout based on input
-      document
-        .getElementById("workoutForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
+      document.getElementById("submit").addEventListener("click", function () {
+        event.preventDefault(); // Prevents closing of accordion
 
-          const rounds = parseInt(document.getElementById("rounds").value);
-          const categoryChange = parseInt(
-            document.getElementById("categoryChange").value
-          );
+        const rounds = parseInt(document.getElementById("rounds").value);
+        const categoryChange = parseInt(
+          document.getElementById("categoryChange").value
+        );
 
-          const selectedCategories = {};
-          if (document.getElementById("chest-arms").checked) {
-            selectedCategories["Chest+Arms"] = EXERCISES["Chest+Arms"];
-          }
-          if (document.getElementById("abs").checked) {
-            selectedCategories["Abs"] = EXERCISES["Abs"];
-          }
-          if (document.getElementById("legs").checked) {
-            selectedCategories["Legs"] = EXERCISES["Legs"];
-          }
+        const selectedCategories = {};
+        if (document.getElementById("chest-arms").checked) {
+          selectedCategories["Chest+Arms"] = EXERCISES["Chest+Arms"];
+        }
+        if (document.getElementById("abs").checked) {
+          selectedCategories["Abs"] = EXERCISES["Abs"];
+        }
+        if (document.getElementById("legs").checked) {
+          selectedCategories["Legs"] = EXERCISES["Legs"];
+        }
 
-          const workout = createWorkout({
-            selectedCategories,
-            rounds,
-            categoryChange,
-          });
-          const outputDiv = document.getElementById("workoutOutput");
-          outputDiv.innerHTML =
-            "<br><h2>Generated Workout</h2>" +
-            '<table class="striped">' +
-            workout
-              .map(
-                (ex) =>
-                  `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
-              )
-              .join("") +
-            "</tbody></table>";
+        const workout = createWorkout({
+          selectedCategories,
+          rounds,
+          categoryChange,
         });
+        const outputDiv = document.getElementById("workoutOutput");
+        outputDiv.innerHTML =
+          '<table class="striped">' +
+          workout
+            .map(
+              (ex) =>
+                `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
+            )
+            .join("") +
+          "</tbody></table>";
+      });
     </script>
   </body>
 </html>
