@@ -23,6 +23,31 @@ const EXERCISES_EMOJIS = {
   Legs: "🦵",
 };
 
+function getExerciseData(categoryNames = null) {
+  return fetch("./exercises.json").then((response) =>
+    response.json().then((data) => {
+      if (categoryNames) {
+        return data.exerciseCategories.filter((category) =>
+          categoryNames.includes(category.categoryName)
+        );
+      } else {
+        return data.exerciseCategories;
+      }
+    })
+  );
+}
+
+function getExerciseCategories() {
+  return getExerciseData().then((categories) => {
+    return categories.map((cat) => ({
+      categoryName: cat.categoryName,
+      emoji: cat.emoji,
+    }));
+  });
+}
+
+getExerciseData(["Abs", "Legs"]).then((data) => console.log(data));
+
 // Utility: Shuffle array (https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
