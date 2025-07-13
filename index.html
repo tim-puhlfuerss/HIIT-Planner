@@ -165,8 +165,15 @@
       });
 
       // Create workout based on input
-      document.getElementById("submit").addEventListener("click", () => {
+      document.getElementById("submit").addEventListener("click", async () => {
         event.preventDefault(); // Prevents closing of accordion
+
+        // Get selected exercise categories
+        const selectedCategories = Array.from(
+          document
+            .getElementById("exerciseCategories")
+            .querySelectorAll("input[type='checkbox']:checked")
+        ).map((checkbox) => checkbox.id);
 
         // Get number of rounds
         const rounds = parseInt(document.getElementById("rounds").value);
@@ -176,27 +183,17 @@
           document.getElementById("categoryChange").value
         );
 
-        const selectedCategories = {};
-        if (document.getElementById("Chest + Arms").checked) {
-          selectedCategories["Chest+Arms"] = EXERCISES["Chest+Arms"];
-        }
-        if (document.getElementById("Abs").checked) {
-          selectedCategories["Abs"] = EXERCISES["Abs"];
-        }
-        if (document.getElementById("Legs").checked) {
-          selectedCategories["Legs"] = EXERCISES["Legs"];
-        }
-
         // Create workout and display exercises in a table
-        if (Object.keys(selectedCategories).length > 0) {
-          const workout = createWorkout({
+        if (selectedCategories.length > 0) {
+          const workout = await createWorkout(
             selectedCategories,
             rounds,
-            categoryChange,
-          });
+            categoryChange
+          );
+
           const outputDiv = document.getElementById("workoutOutput");
           outputDiv.innerHTML =
-            '<table class="striped">' +
+            '<table class="striped"><tbody>' +
             workout
               .map(
                 (ex) =>
