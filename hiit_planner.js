@@ -23,30 +23,27 @@ const EXERCISES_EMOJIS = {
   Legs: "🦵",
 };
 
-function getExerciseData(categoryNames = null) {
-  return fetch("./exercises.json").then((response) =>
-    response.json().then((data) => {
-      if (categoryNames) {
-        return data.exerciseCategories.filter((category) =>
-          categoryNames.includes(category.categoryName)
-        );
-      } else {
-        return data.exerciseCategories;
-      }
-    })
-  );
+async function getExerciseData(categoryNames = null) {
+  const response = await fetch("./exercises.json");
+  const data = await response.json();
+
+  if (categoryNames) {
+    return data.exerciseCategories.filter((category) =>
+      categoryNames.includes(category.categoryName)
+    );
+  } else {
+    return data.exerciseCategories;
+  }
 }
 
-function getExerciseCategories() {
-  return getExerciseData().then((categories) => {
-    return categories.map((cat) => ({
-      categoryName: cat.categoryName,
-      emoji: cat.emoji,
-    }));
-  });
-}
+async function getExerciseCategories() {
+  const categories = await getExerciseData();
 
-getExerciseData(["Abs", "Legs"]).then((data) => console.log(data));
+  return categories.map((cat) => ({
+    categoryName: cat.categoryName,
+    emoji: cat.emoji,
+  }));
+}
 
 // Utility: Shuffle array (https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 function shuffle(arr) {

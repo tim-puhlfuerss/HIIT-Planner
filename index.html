@@ -36,18 +36,7 @@
             <fieldset class="container">
               <fieldset>
                 <legend><strong>Exercise categories:</strong></legend>
-                <label>
-                  <input type="checkbox" id="chest-arms" checked />
-                  💪 Chest + Arms
-                </label>
-                <label>
-                  <input type="checkbox" id="abs" checked />
-                  🧘 Abs
-                </label>
-                <label>
-                  <input type="checkbox" id="legs" checked />
-                  🦵 Legs
-                </label>
+                <div id="exerciseCategories"></div>
               </fieldset>
 
               <label for="rounds"><strong>Number of rounds:</strong></label>
@@ -128,19 +117,31 @@
     </footer>
 
     <script>
+      // Add exercise categories as checkboxes
+      document.addEventListener("DOMContentLoaded", async () => {
+        let categoryCheckboxes = "";
+
+        for (const cat of await getExerciseCategories()) {
+          categoryCheckboxes += `<label><input type="checkbox" id="${cat.categoryName}" checked />${cat.emoji} ${cat.categoryName}</label>`;
+        }
+
+        document.getElementById("exerciseCategories").innerHTML =
+          categoryCheckboxes;
+      });
+
       // Increase and decrease category change input
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", () => {
         const categoryChangeInput = document.getElementById("categoryChange");
 
         document
           .getElementById("categoryChangeIncrease")
-          .addEventListener("click", function () {
+          .addEventListener("click", () => {
             categoryChangeInput.value = parseInt(categoryChangeInput.value) + 1;
           });
 
         document
           .getElementById("categoryChangeDecrease")
-          .addEventListener("click", function () {
+          .addEventListener("click", () => {
             if (parseInt(categoryChangeInput.value) > 1) {
               categoryChangeInput.value =
                 parseInt(categoryChangeInput.value) - 1;
@@ -149,18 +150,18 @@
       });
 
       // Increase and decrease rounds input
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", () => {
         const roundsInput = document.getElementById("rounds");
 
         document
           .getElementById("roundsIncrease")
-          .addEventListener("click", function () {
+          .addEventListener("click", () => {
             roundsInput.value = parseInt(roundsInput.value) + 1;
           });
 
         document
           .getElementById("roundsDecrease")
-          .addEventListener("click", function () {
+          .addEventListener("click", () => {
             if (parseInt(roundsInput.value) > 1) {
               roundsInput.value = parseInt(roundsInput.value) - 1;
             }
@@ -168,7 +169,7 @@
       });
 
       // Generate workout based on input
-      document.getElementById("submit").addEventListener("click", function () {
+      document.getElementById("submit").addEventListener("click", () => {
         event.preventDefault(); // Prevents closing of accordion
 
         const rounds = parseInt(document.getElementById("rounds").value);
@@ -177,31 +178,33 @@
         );
 
         const selectedCategories = {};
-        if (document.getElementById("chest-arms").checked) {
+        if (document.getElementById("Chest + Arms").checked) {
           selectedCategories["Chest+Arms"] = EXERCISES["Chest+Arms"];
         }
-        if (document.getElementById("abs").checked) {
+        if (document.getElementById("Abs").checked) {
           selectedCategories["Abs"] = EXERCISES["Abs"];
         }
-        if (document.getElementById("legs").checked) {
+        if (document.getElementById("Legs").checked) {
           selectedCategories["Legs"] = EXERCISES["Legs"];
         }
 
-        const workout = createWorkout({
-          selectedCategories,
-          rounds,
-          categoryChange,
-        });
-        const outputDiv = document.getElementById("workoutOutput");
-        outputDiv.innerHTML =
-          '<table class="striped">' +
-          workout
-            .map(
-              (ex) =>
-                `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
-            )
-            .join("") +
-          "</tbody></table>";
+        if (Object.keys(selectedCategories).length > 0) {
+          const workout = createWorkout({
+            selectedCategories,
+            rounds,
+            categoryChange,
+          });
+          const outputDiv = document.getElementById("workoutOutput");
+          outputDiv.innerHTML =
+            '<table class="striped">' +
+            workout
+              .map(
+                (ex) =>
+                  `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
+              )
+              .join("") +
+            "</tbody></table>";
+        }
       });
     </script>
   </body>
