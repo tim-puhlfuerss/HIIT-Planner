@@ -117,8 +117,8 @@
     </footer>
 
     <script>
-      // Add exercise categories as checkboxes
       document.addEventListener("DOMContentLoaded", async () => {
+        // Fetch exercise categories asynchronously and add them as checkboxes to the DOM
         let categoryCheckboxes = "";
 
         for (const cat of await getExerciseCategories()) {
@@ -127,10 +127,8 @@
 
         document.getElementById("exerciseCategories").innerHTML =
           categoryCheckboxes;
-      });
 
-      // Increase and decrease category change input
-      document.addEventListener("DOMContentLoaded", () => {
+        // Increase and decrease category change input
         const categoryChangeInput = document.getElementById("categoryChange");
 
         document
@@ -147,10 +145,8 @@
                 parseInt(categoryChangeInput.value) - 1;
             }
           });
-      });
 
-      // Increase and decrease rounds input
-      document.addEventListener("DOMContentLoaded", () => {
+        // Increase and decrease rounds input
         const roundsInput = document.getElementById("rounds");
 
         document
@@ -168,11 +164,14 @@
           });
       });
 
-      // Generate workout based on input
+      // Create workout based on input
       document.getElementById("submit").addEventListener("click", () => {
         event.preventDefault(); // Prevents closing of accordion
 
+        // Get number of rounds
         const rounds = parseInt(document.getElementById("rounds").value);
+
+        // Get number of category changes
         const categoryChange = parseInt(
           document.getElementById("categoryChange").value
         );
@@ -188,6 +187,7 @@
           selectedCategories["Legs"] = EXERCISES["Legs"];
         }
 
+        // Create workout and display exercises in a table
         if (Object.keys(selectedCategories).length > 0) {
           const workout = createWorkout({
             selectedCategories,
@@ -204,6 +204,8 @@
               )
               .join("") +
             "</tbody></table>";
+        } else {
+          document.getElementById("workoutOutput").innerHTML = "";
         }
       });
     </script>
