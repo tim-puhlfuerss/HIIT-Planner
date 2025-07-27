@@ -1,6 +1,37 @@
+// Helper function to sanitize JSON content
+function sanitizeJSON(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Recursive function to sanitize all string values in a JSON object
+function sanitizeJSONObject(obj) {
+  if (typeof obj === "string") {
+    return sanitizeJSON(obj);
+  } else if (Array.isArray(obj)) {
+    return obj.map((item) => sanitizeJSONObject(item));
+  } else if (obj !== null && typeof obj === "object") {
+    const sanitized = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        sanitized[key] = sanitizeJSONObject(obj[key]);
+      }
+    }
+    return sanitized;
+  }
+  return obj; // Return as-is for non-string, non-object, non-array values
+}
+
 async function getExerciseData(categoryNames = null) {
   const response = await fetch("./exercises.json");
-  const data = await response.json();
+  //const data = await response.json();
+
+  // Sanitize the entire JSON object
+  const data = sanitizeJSONObject(await response.json());
 
   if (categoryNames) {
     return data.exerciseCategories.filter((category) =>

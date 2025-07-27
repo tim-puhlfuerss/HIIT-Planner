@@ -15,7 +15,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     />
-    <script src="hiit_planner.js" defer></script>
+    <link rel="stylesheet" href="stylesheet.css" />
+    <script src="hiit_planner.js"></script>
   </head>
   <body>
     <header class="container">
@@ -165,46 +166,47 @@
       });
 
       // Create workout based on input
-      document.getElementById("submit").addEventListener("click", async () => {
-        event.preventDefault(); // Prevents closing of accordion
+      document
+        .getElementById("submit")
+        .addEventListener("click", async (event) => {
+          event.preventDefault(); // Prevents closing of accordion
 
-        // Get selected exercise categories
-        const selectedCategories = Array.from(
-          document
-            .getElementById("exerciseCategories")
-            .querySelectorAll("input[type='checkbox']:checked")
-        ).map((checkbox) => checkbox.id);
+          // Get selected exercise categories
+          const selectedCategories = Array.from(
+            document
+              .getElementById("exerciseCategories")
+              .querySelectorAll("input[type='checkbox']:checked")
+          ).map((checkbox) => checkbox.id);
 
-        // Get number of rounds
-        const rounds = parseInt(document.getElementById("rounds").value);
+          // Get number of rounds
+          const rounds = parseInt(document.getElementById("rounds").value);
 
-        // Get number of category changes
-        const categoryChange = parseInt(
-          document.getElementById("categoryChange").value
-        );
-
-        // Create workout and display exercises in a table
-        if (selectedCategories.length > 0) {
-          const workout = await createWorkout(
-            selectedCategories,
-            rounds,
-            categoryChange
+          // Get number of category changes
+          const categoryChange = parseInt(
+            document.getElementById("categoryChange").value
           );
 
-          const outputDiv = document.getElementById("workoutOutput");
-          outputDiv.innerHTML =
-            '<table class="striped"><tbody>' +
-            workout
-              .map(
-                (ex) =>
-                  `<tr><td><h4>${ex.emoji}</h4></td><td><h4>${ex.exercise}</h4></td></tr>`
-              )
-              .join("") +
-            "</tbody></table>";
-        } else {
-          document.getElementById("workoutOutput").innerHTML = "";
-        }
-      });
+          // Create workout and display exercises in a table
+          if (selectedCategories.length > 0) {
+            const workout = await createWorkout(
+              selectedCategories,
+              rounds,
+              categoryChange
+            );
+
+            const outputDiv = document.getElementById("workoutOutput");
+            outputDiv.innerHTML =
+              '<table class="striped exercise-list"><tbody>' +
+              workout
+                .map(
+                  (ex) => `<tr><td>${ex.emoji}</td><td>${ex.exercise}</td></tr>`
+                )
+                .join("") +
+              "</tbody></table>";
+          } else {
+            document.getElementById("workoutOutput").innerHTML = "";
+          }
+        });
     </script>
   </body>
 </html>
