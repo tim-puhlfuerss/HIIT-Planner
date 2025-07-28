@@ -1,0 +1,7 @@
+const CONFIG = {
+  DEFAULT_ROUNDS: 10,
+  DEFAULT_CATEGORY_CHANGE: 1,
+  MIN_ROUNDS: 1,
+  MIN_CATEGORY_CHANGE: 1,
+  EXERCISES_FILE: "./data/exercises.json",
+};

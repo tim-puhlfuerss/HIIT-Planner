@@ -10,13 +10,19 @@
     />
     <title>HIIT Workout Planner</title>
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     />
-    <link rel="stylesheet" href="stylesheet.css" />
-    <script src="hiit_planner.js"></script>
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="js/utils/config.js"></script>
+    <script src="js/utils/error-handler.js"></script>
+    <script src="js/utils/validator.js"></script>
+    <script src="js/services/exercise-service.js"></script>
+    <script src="js/services/workout-service.js"></script>
+    <script src="js/controllers/ui-controller.js"></script>
+    <script src="js/app.js"></script>
   </head>
   <body>
     <header class="container">
@@ -116,97 +122,5 @@
         >
       </p>
     </footer>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        // Fetch exercise categories asynchronously and add them as checkboxes to the DOM
-        let categoryCheckboxes = "";
-
-        for (const cat of await getExerciseCategories()) {
-          categoryCheckboxes += `<label><input type="checkbox" id="${cat.categoryName}" checked />${cat.emoji} ${cat.categoryName}</label>`;
-        }
-
-        document.getElementById("exerciseCategories").innerHTML =
-          categoryCheckboxes;
-
-        // Increase and decrease category change input
-        const categoryChangeInput = document.getElementById("categoryChange");
-
-        document
-          .getElementById("categoryChangeIncrease")
-          .addEventListener("click", () => {
-            categoryChangeInput.value = parseInt(categoryChangeInput.value) + 1;
-          });
-
-        document
-          .getElementById("categoryChangeDecrease")
-          .addEventListener("click", () => {
-            if (parseInt(categoryChangeInput.value) > 1) {
-              categoryChangeInput.value =
-                parseInt(categoryChangeInput.value) - 1;
-            }
-          });
-
-        // Increase and decrease rounds input
-        const roundsInput = document.getElementById("rounds");
-
-        document
-          .getElementById("roundsIncrease")
-          .addEventListener("click", () => {
-            roundsInput.value = parseInt(roundsInput.value) + 1;
-          });
-
-        document
-          .getElementById("roundsDecrease")
-          .addEventListener("click", () => {
-            if (parseInt(roundsInput.value) > 1) {
-              roundsInput.value = parseInt(roundsInput.value) - 1;
-            }
-          });
-      });
-
-      // Create workout based on input
-      document
-        .getElementById("submit")
-        .addEventListener("click", async (event) => {
-          event.preventDefault(); // Prevents closing of accordion
-
-          // Get selected exercise categories
-          const selectedCategories = Array.from(
-            document
-              .getElementById("exerciseCategories")
-              .querySelectorAll("input[type='checkbox']:checked")
-          ).map((checkbox) => checkbox.id);
-
-          // Get number of rounds
-          const rounds = parseInt(document.getElementById("rounds").value);
-
-          // Get number of category changes
-          const categoryChange = parseInt(
-            document.getElementById("categoryChange").value
-          );
-
-          // Create workout and display exercises in a table
-          if (selectedCategories.length > 0) {
-            const workout = await createWorkout(
-              selectedCategories,
-              rounds,
-              categoryChange
-            );
-
-            const outputDiv = document.getElementById("workoutOutput");
-            outputDiv.innerHTML =
-              '<table class="striped exercise-list"><tbody>' +
-              workout
-                .map(
-                  (ex) => `<tr><td>${ex.emoji}</td><td>${ex.exercise}</td></tr>`
-                )
-                .join("") +
-              "</tbody></table>";
-          } else {
-            document.getElementById("workoutOutput").innerHTML = "";
-          }
-        });
-    </script>
   </body>
 </html>
