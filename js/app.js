@@ -1,2 +1,2 @@
-// Initialize the application
+// Initialize the UI controls
 const app = new UIController();

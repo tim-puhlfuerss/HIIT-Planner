@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light dark" />
     <meta
       name="description"
-      content="Generate HIIT workouts with random exercises and customizable rounds."
+      content="Generate customizable high-intensity interval trainings"
     />
     <title>HIIT Workout Planner</title>
 
@@ -30,7 +30,8 @@
         <br />
         <h1>HIIT Workout Planner 💪</h1>
         <p>
-          Generate HIIT workouts with random exercises and customizable rounds.
+          Generate customizable
+          <strong>high-intensity interval trainings</strong>
         </p>
       </hgroup>
     </header>
@@ -46,7 +47,9 @@
                 <div id="exerciseCategories"></div>
               </fieldset>
 
-              <label for="rounds"><strong>Number of rounds:</strong></label>
+              <label for="rounds"
+                ><strong>Total number of rounds:</strong></label
+              >
               <fieldset role="group">
                 <input
                   type="number"
@@ -107,6 +110,7 @@
             </section>
           </details>
         </form>
+        <div id="errorMessages"></div>
       </section>
     </main>
     <footer class="container">

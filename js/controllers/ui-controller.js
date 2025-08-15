@@ -1,11 +1,37 @@
+/**
+ * Controller class to handle user interactions.
+ *
+ * @class UIController
+ */
 class UIController {
+  /**
+   * Initializes all event listeners of the user interface.
+   */
   constructor() {
-    this.initializeEventListeners();
+    document.addEventListener("DOMContentLoaded", async () => {
+      this.initializeExerciseCategories();
+      this.initializeNumbersControls();
+
+      // Generates and displays the workout exercises
+      document
+        .getElementById("submit")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          this.generateWorkout();
+        });
+    });
   }
 
+  /**
+   * Loads and displays all available exercise categories as checkboxes in the user interface.
+   *
+   * @returns {void}
+   * @async
+   * @private
+   */
   async initializeExerciseCategories() {
     const result = await ErrorHandler.handleAsyncOperation(
-      async () => await ExerciseService.getExerciseCategories(),
+      () => ExerciseService.getExerciseCategories(),
       "Failed to load exercise categories. Please refresh the page."
     );
 
@@ -22,14 +48,20 @@ class UIController {
     }
   }
 
-  initializeNumberInputs() {
-    this.setupNumberInput(
+  /**
+   * Defines increase and decrease actions for numbers in user interface form.
+   *
+   * @returns {void}
+   * @private
+   */
+  initializeNumbersControls() {
+    this.initializeNumberControls(
       "rounds",
       "roundsIncrease",
       "roundsDecrease",
       CONFIG.MIN_ROUNDS
     );
-    this.setupNumberInput(
+    this.initializeNumberControls(
       "categoryChange",
       "categoryChangeIncrease",
       "categoryChangeDecrease",
@@ -37,7 +69,17 @@ class UIController {
     );
   }
 
-  setupNumberInput(inputId, increaseId, decreaseId, minValue = 1) {
+  /**
+   * Abstract method that handles increase and decrease actions for one number in user interface form.
+   *
+   * @param {string} inputId - ID of HTML text field that displays the number.
+   * @param {string} increaseId - ID of HTML button that increases the numbers.
+   * @param {string} decreaseId - ID of HTML button that decreases the numbers.
+   * @param {number} minValue - Minimum value of the displayed number.
+   * @returns {void}
+   * @private
+   */
+  initializeNumberControls(inputId, increaseId, decreaseId, minValue = 1) {
     const input = document.getElementById(inputId);
 
     document.getElementById(increaseId).addEventListener("click", () => {
@@ -51,6 +93,13 @@ class UIController {
     });
   }
 
+  /**
+   * Generates and displays workout with random order of exercises based on the user's configuration.
+   *
+   * @returns {void}
+   * @async
+   * @private
+   */
   async generateWorkout() {
     const selectedCategories = this.getSelectedCategories();
     const rounds = parseInt(document.getElementById("rounds").value);
@@ -58,8 +107,7 @@ class UIController {
       document.getElementById("categoryChange").value
     );
 
-    // Validate input
-    const validation = Validator.validateWorkoutParameters(
+    const validation = Validator.validateWorkoutConfiguration(
       selectedCategories,
       rounds,
       categoryChange
@@ -71,8 +119,8 @@ class UIController {
     }
 
     const workout = await ErrorHandler.handleAsyncOperation(
-      async () =>
-        await WorkoutService.createWorkout(
+      () =>
+        WorkoutService.createWorkout(
           selectedCategories,
           rounds,
           categoryChange
@@ -85,6 +133,12 @@ class UIController {
     }
   }
 
+  /**
+   * Returns all exercise categories selected by the user.
+   *
+   * @returns {string[]} Array of exercise categories
+   * @private
+   */
   getSelectedCategories() {
     return Array.from(
       document
@@ -93,6 +147,13 @@ class UIController {
     ).map((checkbox) => checkbox.id);
   }
 
+  /**
+   * Displays exercises of the workout as table in the user interface.
+   *
+   * @param {{emoji:string, exercise:string}[]} workout - Array of exercises
+   * @returns {void}
+   * @private
+   */
   displayWorkout(workout) {
     const outputDiv = document.getElementById("workoutOutput");
     const tableRows = workout
@@ -100,19 +161,5 @@ class UIController {
       .join("");
 
     outputDiv.innerHTML = `<table class="striped exercise-list"><tbody>${tableRows}</tbody></table>`;
-  }
-
-  initializeEventListeners() {
-    document.addEventListener("DOMContentLoaded", async () => {
-      await this.initializeExerciseCategories();
-      this.initializeNumberInputs();
-
-      document
-        .getElementById("submit")
-        .addEventListener("click", async (event) => {
-          event.preventDefault();
-          await this.generateWorkout();
-        });
-    });
   }
 }
